@@ -10,6 +10,8 @@ public class testInteraction : MonoBehaviour
     [SerializeField] private Renderer renderer;
     private Material defaultMaterial;
     
+    [SerializeField] private InteractionData interactionData;
+    
     private void Awake()
     {
         defaultMaterial = renderer.material;
@@ -21,7 +23,7 @@ public class testInteraction : MonoBehaviour
         if (Input.GetKeyDown(interactKey))
         {
             Interact();
-            InteractableTracker.Instance.RegisterInteraction(new InteractionData(this, transform, "Interact"));
+            InteractableTracker.Instance.RegisterInteraction(interactionData);
         }
     }
     

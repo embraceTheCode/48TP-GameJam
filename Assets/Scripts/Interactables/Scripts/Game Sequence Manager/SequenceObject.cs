@@ -6,6 +6,7 @@ using UnityEngine;
 [Serializable]
 public class SequenceObject
 {
-    [SerializeField] private GameObject gameObject;
-    [SerializeField] private bool isCheckObject;
+    [SerializeField] public GameObject gameObject;
+    [SerializeField] public bool isCheckObject;
+    [SerializeField] public bool isAIResatable;
 }
