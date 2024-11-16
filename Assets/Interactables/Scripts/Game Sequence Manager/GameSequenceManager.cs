@@ -4,15 +4,16 @@ using UnityEngine;
 
 public class GameSequenceManager : MonoBehaviour
 {
-    [SerializeField] public List<SequenceObject> sequenceObject;
+    [SerializeField] public List<SequenceObjectWrapper> gameSequences;
+    private int currentSequence;
 
     void Start()
     {
-        
+        currentSequence = 0;
     }
 
-    void Update()
+    public void PerformCheck()
     {
-        
+        //gameSequences[currentSequence][]
     }
 }
