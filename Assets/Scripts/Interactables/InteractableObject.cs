@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,23 +7,15 @@ public class InteractableObject : MonoBehaviour, IInteractable
 {
     [SerializeField] private Animator animator;
 
-    // Event Information
-    public delegate void InteractAction(InteractableObject interactableObject);
-    public static event InteractAction OnInteract;
+    public Action<bool> OnInteract;
 
     // Object Information
-    [HideInInspector]
     public SequenceObject sequenceObject;
-    public bool interacted;
+    [HideInInspector] public bool interacted;
 
     void Start()
     {
         sequenceObject.gameObject = gameObject;
-    }
-
-    private void Update()
-    {
-        
     }
 
     private void OnMouseOver()
@@ -32,8 +25,8 @@ public class InteractableObject : MonoBehaviour, IInteractable
 
     public void Interact()
     {
-        //OnInteract.Invoke(this);
-        animator.SetTrigger("Trigger");
         interacted = !interacted;
+        OnInteract.Invoke(interacted);
+        animator.SetTrigger("Trigger");
     }
 }
