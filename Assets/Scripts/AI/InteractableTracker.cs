@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class InteractableTracker : MonoBehaviour
 {
+    public Action<InteractionData> OnNoticeableInteract;
+    
     public static InteractableTracker Instance;
     private Stack<InteractionData> _interactables = new ();
     
@@ -25,6 +27,11 @@ public class InteractableTracker : MonoBehaviour
     public void RegisterInteraction(InteractionData interactionData)
     {
         _interactables.Push(interactionData);
+        
+        if(interactionData.IsNoticeable)
+        {
+            OnNoticeableInteract?.Invoke(interactionData);
+        }
     }
     
     public void UnregisterInteraction()
