@@ -32,7 +32,7 @@ public class InteractableObject : MonoBehaviour, IInteractable
 
     public void Interact()
     {
-        OnInteract.Invoke(this);
+        //OnInteract.Invoke(this);
         animator.SetTrigger("Trigger");
         interacted = !interacted;
     }
