@@ -6,31 +6,34 @@ public class InteractableObject : MonoBehaviour, IInteractable
 {
     [SerializeField] private Animator animator;
 
+    // Event Information
+    public delegate void InteractAction(InteractableObject interactableObject);
+    public static event InteractAction OnInteract;
+
+    // Object Information
+    [HideInInspector]
+    public SequenceObject sequenceObject;
+    public bool interacted;
+
     void Start()
     {
-        //animator.GetComponent<Animator>();        
+        sequenceObject.gameObject = gameObject;
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            Interact();
-        }
+        
     }
 
-    private void OnMouseDown()
+    private void OnMouseOver()
     {
-        Interact();
+        
     }
 
     public void Interact()
     {
+        OnInteract.Invoke(this);
         animator.SetTrigger("Trigger");
-    }
-
-    public void ResetInteractable()
-    {
-        animator.SetTrigger("Trigger");
+        interacted = !interacted;
     }
 }

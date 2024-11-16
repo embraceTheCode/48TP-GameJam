@@ -6,5 +6,5 @@ using UnityEngine;
 [Serializable]
 public class SequenceObjectWrapper
 {
-    [SerializeField] private List<SequenceObject> sequenceObjects;
+    [SerializeField] public List<SequenceObject> sequenceObjects;
 }
