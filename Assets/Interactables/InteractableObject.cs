@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InteractableObject : MonoBehaviour, I_Interactable
+public class InteractableObject : MonoBehaviour, IInteractable
 {
     [SerializeField] private Animator animator;
 
