@@ -2,13 +2,16 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class SetSpeed : MonoBehaviour
 {
-    [SerializeField] private Animator _animator;
+    [SerializeField] private Animator animator;
+    [SerializeField] private NavMeshAgent agent;
+    private static readonly int IsMoving = Animator.StringToHash("isMoving");
 
     private void Update()
     {
-        _animator.SetFloat();
+        animator.SetBool(IsMoving, agent.hasPath);
     }
 }
