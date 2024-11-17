@@ -57,11 +57,13 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 908a9ae9054b26f48ad351d2835fa4b8, type: 3}
   - {fileID: 21300000, guid: c6b3b6fb3d98bc940ac9a6e8e17c16f5, type: 3}
   - {fileID: 21300000, guid: 28d8da2ac9455fa4fbe75d1f18748996, type: 3}
+  - {fileID: 21300000, guid: c3896b05be6905a448d8802e908e9b4f, type: 3}
   - {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
   activatedPipeSprites:
   - {fileID: 21300000, guid: 25b9fb2c6f2ee1c4382651d47658c855, type: 3}
   - {fileID: 21300000, guid: e15ce724d1f05484c80390ecbaad27b2, type: 3}
   - {fileID: 21300000, guid: a7fb74c85ec14ef4e9a0dac245dc667f, type: 3}
+  - {fileID: 21300000, guid: 1e1cafca90e3e9e4f8ba623f8cc2229f, type: 3}
   - {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
   _textMeshProUGUI: {fileID: 5372345777101677285}
 --- !u!222 &5968798636380337521
