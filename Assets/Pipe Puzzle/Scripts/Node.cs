@@ -9,7 +9,7 @@ public class Node : MonoBehaviour
     {
         if ((detectionLayer.value & (1 << other.gameObject.layer)) != 0)
         {
-            Debug.Log(other.name);
+            Debug.Log(other.gameObject.transform.parent);
         }
     }
 }
