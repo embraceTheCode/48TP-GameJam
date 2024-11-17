@@ -35,46 +35,25 @@ public class GridObject
         {
             return;
         }
-        
-        DeactivateNeighbours();
-        Rotate();
-        ActivateNeighbours();
-    }
 
+        if (PipeData.PipeType == PipeType.Detonator)
+        {
+            LevelGrid.Instance.ExplodeBombs();
+            return;
+        }
+
+        Rotate();
+        // Recalculate all energy distribution after rotation
+        LevelGrid.Instance.RecalculateEnergyDistribution();
+    }
+    
     private void Rotate()
     {
         PipeData.Rotation = (PipeData.Rotation + 1) % 4;
+        OnGridObjectUpdated?.Invoke();
     }
     
-    private void ActivateNeighbours()
-    {
-        List<GridPosition> neighbours = GetNeighbours();
-        neighbours.Add(_gridPosition);
-        foreach (GridPosition neighbour in neighbours)
-        {
-            GridObject gridObject = _parentGrid.GetGridObject(neighbour);
-            gridObject.PipeData.energy++;
-            gridObject.OnGridObjectUpdated?.Invoke();
-            if(gridObject.PipeData.PipeType == PipeType.Bomb && gridObject.PipeData.energy > 0)
-            {
-                Debug.Log("EXPLOSION");
-            }
-        }
-    }
-    
-    private void DeactivateNeighbours()
-    {
-        List<GridPosition> neighbours = GetNeighbours();
-        neighbours.Add(_gridPosition);
-        foreach (GridPosition neighbour in neighbours)
-        {
-            GridObject gridObject = _parentGrid.GetGridObject(neighbour);
-            gridObject.PipeData.energy--;
-            gridObject.OnGridObjectUpdated?.Invoke();
-        }
-    }
-    
-    private List<GridPosition> GetNeighbours()
+    public List<GridPosition> GetNeighbours()
     {
         List<GridPosition> neighbours = GetNeighboursByShape(PipeData.PipeType);
         List<GridPosition> filteredNeighbours = new(neighbours);
@@ -122,8 +101,8 @@ public class GridObject
                 }
                 else if(PipeData.Rotation == 1)
                 {
-                    neighbours.Add(new GridPosition(_gridPosition.x - 1, _gridPosition.z));
-                    neighbours.Add(new GridPosition(_gridPosition.x, _gridPosition.z - 1));
+                    neighbours.Add(new GridPosition(_gridPosition.x + 1, _gridPosition.z));
+                    neighbours.Add(new GridPosition(_gridPosition.x, _gridPosition.z + 1));
                 }
                 else if(PipeData.Rotation == 2)
                 {
@@ -132,8 +111,8 @@ public class GridObject
                 }
                 else
                 {
-                    neighbours.Add(new GridPosition(_gridPosition.x + 1, _gridPosition.z));
-                    neighbours.Add(new GridPosition(_gridPosition.x, _gridPosition.z + 1));
+                    neighbours.Add(new GridPosition(_gridPosition.x - 1, _gridPosition.z));
+                    neighbours.Add(new GridPosition(_gridPosition.x, _gridPosition.z - 1));
                 }
                 break;
             
@@ -148,7 +127,7 @@ public class GridObject
                 {
                     neighbours.Add(new GridPosition(_gridPosition.x + 1, _gridPosition.z));
                     neighbours.Add(new GridPosition(_gridPosition.x - 1, _gridPosition.z));
-                    neighbours.Add(new GridPosition(_gridPosition.x, _gridPosition.z - 1));
+                    neighbours.Add(new GridPosition(_gridPosition.x, _gridPosition.z + 1));
                 }
                 else if(PipeData.Rotation == 2)
                 {
@@ -160,8 +139,16 @@ public class GridObject
                 {
                     neighbours.Add(new GridPosition(_gridPosition.x + 1, _gridPosition.z));
                     neighbours.Add(new GridPosition(_gridPosition.x - 1, _gridPosition.z));
-                    neighbours.Add(new GridPosition(_gridPosition.x, _gridPosition.z + 1));
+                    neighbours.Add(new GridPosition(_gridPosition.x, _gridPosition.z - 1));
                 }
+                break;
+            
+            case PipeType.Bomb:
+            case PipeType.Detonator:
+                neighbours.Add(new GridPosition(_gridPosition.x + 1, _gridPosition.z));
+                neighbours.Add(new GridPosition(_gridPosition.x - 1, _gridPosition.z));
+                neighbours.Add(new GridPosition(_gridPosition.x, _gridPosition.z + 1));
+                neighbours.Add(new GridPosition(_gridPosition.x, _gridPosition.z - 1));
                 break;
             
             default:
@@ -174,6 +161,10 @@ public class GridObject
     public void SetPipeData(PipeData initialPipeValue)
     {
         PipeData = initialPipeValue;
-        ActivateNeighbours();
+    }
+
+    public void Explode()
+    {
+        UnityEngine.Debug.Log("Explode");
     }
 }

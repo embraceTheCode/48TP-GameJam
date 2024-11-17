@@ -34,6 +34,7 @@ public class PipeVisual : MonoBehaviour
         {
             image.sprite = regularPipeSprites[(int)GridObject.PipeData.PipeType];
         }
+        SetGridPosition(_gridPosition);
     }
     
     private void RotatePipe()
@@ -44,7 +45,7 @@ public class PipeVisual : MonoBehaviour
     public void SetGridPosition(GridPosition gridPosition)
     {
         _gridPosition = gridPosition;
-        _textMeshProUGUI.text = gridPosition.ToString();
+        _textMeshProUGUI.text = gridPosition.ToString() + "\n" + GridObject.PipeData.energy;
     }
 
     private void OnMouseDown()

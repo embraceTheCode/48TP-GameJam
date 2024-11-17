@@ -8,5 +8,6 @@ public enum PipeType
     Elbow,
     T,
     Bomb,
+    Detonator,
     Empty
 }
