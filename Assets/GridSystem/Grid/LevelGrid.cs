@@ -149,7 +149,7 @@ public class LevelGrid : SerializedMonoBehaviour
                 GridPosition gridPosition = new GridPosition(x, y);
                 GridObject gridObject = GetGridObject(gridPosition);
                 
-                if (gridObject.PipeData.PipeType == PipeType.Bomb)
+                if (gridObject.PipeData.PipeType == PipeType.Bomb && gridObject.PipeData.energy > 0)
                 {
                     gridObject.Explode();
                 }
