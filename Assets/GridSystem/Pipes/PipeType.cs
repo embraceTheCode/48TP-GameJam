@@ -7,5 +7,6 @@ public enum PipeType
     Straight,
     Elbow,
     T,
+    Bomb,
     Empty
 }

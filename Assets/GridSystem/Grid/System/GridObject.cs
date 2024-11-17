@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UIElements;
 using Random = UnityEngine.Random;
 
@@ -9,7 +10,6 @@ public class GridObject
     
     private GridSystem<GridObject> _parentGrid;
     private GridPosition _gridPosition;
-    private bool _isInteractable;
     public PipeData PipeData;
     
     public bool IsActivated => PipeData.energy > 0;
@@ -20,6 +20,8 @@ public class GridObject
         _gridPosition = gridPosition;
         PipeData.Rotation = 0;
         PipeData.PipeType = PipeType.Empty;
+        PipeData.energy = 0;
+        PipeData.isInteractable = false;
     }
 
     public override string ToString()
@@ -29,6 +31,11 @@ public class GridObject
 
     public void Interact()
     {
+        if(!PipeData.isInteractable)
+        {
+            return;
+        }
+        
         DeactivateNeighbours();
         Rotate();
         ActivateNeighbours();
@@ -48,6 +55,10 @@ public class GridObject
             GridObject gridObject = _parentGrid.GetGridObject(neighbour);
             gridObject.PipeData.energy++;
             gridObject.OnGridObjectUpdated?.Invoke();
+            if(gridObject.PipeData.PipeType == PipeType.Bomb && gridObject.PipeData.energy > 0)
+            {
+                Debug.Log("EXPLOSION");
+            }
         }
     }
     

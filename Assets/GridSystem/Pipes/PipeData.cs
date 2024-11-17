@@ -10,4 +10,5 @@ public struct PipeData
     public PipeType PipeType;
     public int Rotation;
     public int energy;
+    public bool isInteractable;
 }
