@@ -16,12 +16,12 @@ public class SpawnPipeGrid : MonoBehaviour
         {
             _currentGrid = grid.transform;   
             
-            for (int x = 0; x < LevelGrid.Instance.GetWidth()/Sections; x++)
+            for (int x = 0; x < LevelGrid.Instance.GetWidth(); x++)
             {
-                for (int y = 0; y < LevelGrid.Instance.GetHeight(); y++)
+                for (int y = 0; y < LevelGrid.Instance.GetHeight()/Sections; y++)
                 {
                     GameObject pipe = Instantiate(pipePrefab, _currentGrid);
-                    pipe.GetComponent<PipeVisual>().SetGridPosition(new GridPosition(x + (_index * LevelGrid.Instance.GetWidth()/Sections), y));
+                    pipe.GetComponent<PipeVisual>().SetGridPosition(new GridPosition(x, y + (_index * LevelGrid.Instance.GetHeight()/Sections)));
                 }
             }
             

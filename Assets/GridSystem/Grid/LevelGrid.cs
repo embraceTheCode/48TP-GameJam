@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using Vector2 = System.Numerics.Vector2;
 
 //? This class depends on changing the script execution order to run before the Default Time
 public class LevelGrid : SerializedMonoBehaviour
@@ -14,7 +15,7 @@ public class LevelGrid : SerializedMonoBehaviour
     [SerializeField] private int _height;
     [SerializeField] private float _cellSize;
     
-    [SerializeField] private Dictionary<Vector2, PipeType> _initialPipes;
+    [SerializeField] private Dictionary<Vector2, PipeData> _initialPipes = new ();
 
 
     private GridSystem<GridObject> _gridSystem;
@@ -30,12 +31,12 @@ public class LevelGrid : SerializedMonoBehaviour
         Instance = this;
         _gridSystem = new GridSystem<GridObject>(_width, _height, _cellSize, (GridSystem<GridObject> grid, GridPosition gridPosition) => new GridObject(grid, gridPosition));
         _gridSystem.CreateDebugObjects(_prefab);
-        
-        foreach (KeyValuePair<Vector2, PipeType> initialPipe in _initialPipes)
+
+        foreach (KeyValuePair<Vector2, PipeData> initialPipe in _initialPipes)
         {
-            GridPosition gridPosition = new GridPosition((int)initialPipe.Key.x, (int)initialPipe.Key.y);
+            GridPosition gridPosition = new GridPosition((int)initialPipe.Key.X, (int)initialPipe.Key.Y);
             GridObject gridObject = _gridSystem.GetGridObject(gridPosition);
-            gridObject.SetPipeType(initialPipe.Value);
+            gridObject.SetPipeData(initialPipe.Value);
         }
     }
     
