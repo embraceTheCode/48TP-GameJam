@@ -1,14 +1,17 @@
+using System;
 using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.UIElements;
+using Random = UnityEngine.Random;
 
 public class GridObject
 {
+    public Action OnGridObjectUpdated;
+    
     private GridSystem<GridObject> _parentGrid;
     private GridPosition _gridPosition;
     private bool _isInteractable;
-    private PipeType _pipeType;
-    private int _rotation;
+    public PipeType PipeType { get; private set; }
+    public int Rotation { get; private set; }
     private int _energy;
     
     public bool IsActivated => _energy > 0;
@@ -18,8 +21,8 @@ public class GridObject
         _parentGrid = parentGrid;
         _gridPosition = gridPosition;
         _isInteractable = isInteractable;
-        _pipeType = pipeType;
-        _rotation = Random.Range(0, 4);
+        PipeType = pipeType;
+        Rotation = Random.Range(0, 4);
         _energy = 0;
     }
 
@@ -37,7 +40,7 @@ public class GridObject
 
     private void Rotate()
     {
-        _rotation = (_rotation + 1) % 4;
+        Rotation = (Rotation + 1) % 4;
     }
     
     private void ActivateNeighbours()
@@ -48,6 +51,7 @@ public class GridObject
         {
             GridObject gridObject = _parentGrid.GetGridObject(neighbour);
             gridObject._energy++;
+            gridObject.OnGridObjectUpdated?.Invoke();
         }
     }
     
@@ -59,12 +63,13 @@ public class GridObject
         {
             GridObject gridObject = _parentGrid.GetGridObject(neighbour);
             gridObject._energy--;
+            gridObject.OnGridObjectUpdated?.Invoke();
         }
     }
     
     private List<GridPosition> GetNeighbours()
     {
-        List<GridPosition> neighbours = GetNeighboursByShape(_pipeType);
+        List<GridPosition> neighbours = GetNeighboursByShape(PipeType);
         List<GridPosition> filteredNeighbours = new(neighbours);
         
         foreach (GridPosition neighbour in neighbours)
@@ -87,33 +92,33 @@ public class GridObject
     {
         List<GridPosition> neighbours = new List<GridPosition>();
 
-        switch (_pipeType)
+        switch (PipeType)
         {
             case PipeType.Straight:
-                if(_rotation == 0 || _rotation == 2)
-                {
-                    neighbours.Add(new GridPosition(_gridPosition.x + 1, _gridPosition.z));
-                    neighbours.Add(new GridPosition(_gridPosition.x - 1, _gridPosition.z));
-                }
-                else
+                if(Rotation == 0 || Rotation == 2)
                 {
                     neighbours.Add(new GridPosition(_gridPosition.x, _gridPosition.z + 1));
                     neighbours.Add(new GridPosition(_gridPosition.x, _gridPosition.z - 1));
                 }
+                else
+                {
+                    neighbours.Add(new GridPosition(_gridPosition.x + 1, _gridPosition.z));
+                    neighbours.Add(new GridPosition(_gridPosition.x - 1, _gridPosition.z));
+                }
                 break;
             
             case PipeType.Elbow:
-                if(_rotation == 0)
+                if(Rotation == 0)
                 {
                     neighbours.Add(new GridPosition(_gridPosition.x + 1, _gridPosition.z));
                     neighbours.Add(new GridPosition(_gridPosition.x, _gridPosition.z - 1));
                 }
-                else if(_rotation == 1)
+                else if(Rotation == 1)
                 {
                     neighbours.Add(new GridPosition(_gridPosition.x - 1, _gridPosition.z));
                     neighbours.Add(new GridPosition(_gridPosition.x, _gridPosition.z - 1));
                 }
-                else if(_rotation == 2)
+                else if(Rotation == 2)
                 {
                     neighbours.Add(new GridPosition(_gridPosition.x - 1, _gridPosition.z));
                     neighbours.Add(new GridPosition(_gridPosition.x, _gridPosition.z + 1));
@@ -126,19 +131,19 @@ public class GridObject
                 break;
             
             case PipeType.T:
-                if (_rotation == 0)
+                if (Rotation == 0)
                 {
                     neighbours.Add(new GridPosition(_gridPosition.x + 1, _gridPosition.z));
                     neighbours.Add(new GridPosition(_gridPosition.x, _gridPosition.z - 1));
                     neighbours.Add(new GridPosition(_gridPosition.x, _gridPosition.z + 1));
                 }
-                else if (_rotation == 1)
+                else if (Rotation == 1)
                 {
                     neighbours.Add(new GridPosition(_gridPosition.x + 1, _gridPosition.z));
                     neighbours.Add(new GridPosition(_gridPosition.x - 1, _gridPosition.z));
                     neighbours.Add(new GridPosition(_gridPosition.x, _gridPosition.z - 1));
                 }
-                else if(_rotation == 2)
+                else if(Rotation == 2)
                 {
                     neighbours.Add(new GridPosition(_gridPosition.x - 1, _gridPosition.z));
                     neighbours.Add(new GridPosition(_gridPosition.x, _gridPosition.z - 1));
@@ -161,7 +166,7 @@ public class GridObject
 
     public void SetPipeType(PipeType pipeType)
     {
-        _pipeType = pipeType;
+        PipeType = pipeType;
         ActivateNeighbours();
     }
 }
