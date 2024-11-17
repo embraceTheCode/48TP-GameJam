@@ -34,7 +34,9 @@ public class LevelGrid : SerializedMonoBehaviour
         // Initialize grid system
         _gridSystem = new GridSystem<GridObject>(_width, _height, _cellSize, 
             (GridSystem<GridObject> grid, GridPosition gridPosition) => new GridObject(grid, gridPosition));
-        _gridSystem.CreateDebugObjects(_prefab);
+        
+        if(_prefab != null)
+            _gridSystem.CreateDebugObjects(_prefab);
 
         // Set initial pipe data
         foreach (KeyValuePair<Vector2, PipeData> initialPipe in _initialPipes)
